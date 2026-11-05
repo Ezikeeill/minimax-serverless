@@ -1,5 +1,5 @@
 runpod:
-  base_path: /runpod-volume
+  base_path: /runpod-volume/workspace
   checkpoints: models/checkpoints
   diffusion_models: models/diffusion_models
   vae: models/vae
