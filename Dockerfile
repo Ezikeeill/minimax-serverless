@@ -1,4 +1,4 @@
-FROM runpod/pytorch:2.4.0-py3.10-cuda12.4.0-devel-ubuntu22.04
+FROM runpod/pytorch:2.2.1-py3.10-cuda12.1.1-devel-ubuntu22.04
 
 WORKDIR /root
 
@@ -13,7 +13,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # Clone ComfyUI and install its base dependencies
 RUN git clone https://github.com/comfyanonymous/ComfyUI.git /root/ComfyUI
 WORKDIR /root/ComfyUI
-RUN pip install --no-cache-dir torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu124
+RUN pip install --no-cache-dir --upgrade torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
 RUN pip install --no-cache-dir -r requirements.txt
 RUN pip install --no-cache-dir runpod
 
