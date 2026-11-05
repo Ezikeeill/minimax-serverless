@@ -13,7 +13,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # Clone ComfyUI and install its base dependencies
 RUN git clone https://github.com/comfyanonymous/ComfyUI.git /root/ComfyUI
 WORKDIR /root/ComfyUI
-RUN pip install --no-cache-dir torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu121
+RUN pip install --no-cache-dir torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu124
 RUN pip install --no-cache-dir -r requirements.txt
 RUN pip install --no-cache-dir runpod
 
