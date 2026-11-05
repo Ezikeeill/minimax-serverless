@@ -23,19 +23,25 @@ def start_comfyui():
         "python", f"{COMFYUI_PATH}/main.py",
         "--listen", "127.0.0.1",
         "--port", "8188",
-        "--extra-model-paths-config", "/workspace/extra_model_paths.yaml"
+        "--extra-model-paths-config", "extra_model_paths.yaml"
     ]
-    subprocess.Popen(cmd)
+    
+    # Run with direct stdout/stderr so full ComfyUI logs stream to RunPod
+    process = subprocess.Popen(cmd)
 
-    # Wait for ComfyUI to become responsive
-    for _ in range(60):
+    # Wait up to 180 seconds for ComfyUI to complete model indexing
+    for i in range(180):
+        # Check if ComfyUI crashed immediately
+        if process.poll() is not None:
+            raise RuntimeError(f"ComfyUI process exited prematurely with code {process.returncode}")
         try:
             urllib.request.urlopen(f"{COMFYUI_URL}/system_stats", timeout=2)
+            print(f"ComfyUI started successfully in {i+1} seconds.")
             return
         except Exception:
             time.sleep(1)
-    raise RuntimeError("ComfyUI failed to start within 60 seconds.")
-
+            
+    raise RuntimeError("ComfyUI failed to start within 180 seconds.")
 def queue_prompt(prompt_workflow):
     p = {"prompt": prompt_workflow, "client_id": str(uuid.uuid4())}
     data = json.dumps(p).encode('utf-8')
