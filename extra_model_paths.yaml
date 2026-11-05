@@ -1,7 +1,7 @@
 runpod:
-  base_path: /workspace/models/
-  checkpoints: diffusion_models
-  diffusion_models: diffusion_models
-  clip: clip
-  vae: vae
-  loras: loras
+  base_path: /runpod-volume
+  checkpoints: models/checkpoints
+  diffusion_models: models/diffusion_models
+  vae: models/vae
+  loras: models/loras
+  clip: models/clip
