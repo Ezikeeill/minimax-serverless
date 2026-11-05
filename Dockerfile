@@ -15,6 +15,7 @@ RUN git clone https://github.com/comfyanonymous/ComfyUI.git /root/ComfyUI
 WORKDIR /root/ComfyUI
 RUN pip install --no-cache-dir --upgrade torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
 RUN pip install --no-cache-dir -r requirements.txt
+RUN sed -i '/@torch.library.custom_op/d' /usr/local/lib/python3.10/dist-packages/comfy_kitchen/backends/eager/conv3d.py || true
 RUN pip install --no-cache-dir runpod
 
 # Set up working directory for the serverless handler
