@@ -22,7 +22,7 @@ WORKDIR /app
 
 # Copy application files
 COPY workflow_api.json /app/workflow_api.json
-COPY extra_model_paths.yaml /workspace/extra_model_paths.yaml
+COPY extra_model_paths.yaml /app/extra_model_paths.yaml
 COPY handler.py /app/handler.py
 
 ENV COMFYUI_PATH=/root/ComfyUI
