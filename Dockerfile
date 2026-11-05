@@ -18,6 +18,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 RUN pip install --no-cache-dir runpod
 
 # Set up working directory for the serverless handler
+ENV COMFY_DISABLE_CUSTOM_OPS=1
 WORKDIR /app
 
 # Copy application files
