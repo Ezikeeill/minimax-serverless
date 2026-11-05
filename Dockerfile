@@ -1,0 +1,31 @@
+FROM runpod/pytorch:2.2.1-py3.10-cuda12.1.1-devel-ubuntu22.04
+
+WORKDIR /root
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    git \
+    ffmpeg \
+    libgl1 \
+    libglib2.0-0 \
+    && rm -rf /var/lib/apt/lists/*
+
+# Clone ComfyUI and install its base dependencies
+RUN git clone https://github.com/comfyanonymous/ComfyUI.git /root/ComfyUI
+WORKDIR /root/ComfyUI
+RUN pip install --no-cache-dir torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu121
+RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir runpod
+
+# Set up working directory for the serverless handler
+WORKDIR /app
+
+# Copy application files
+COPY workflow_api.json /app/workflow_api.json
+COPY extra_model_paths.yaml /workspace/extra_model_paths.yaml
+COPY handler.py /app/handler.py
+
+ENV COMFYUI_PATH=/root/ComfyUI
+ENV PYTHONUNBUFFERED=1
+
+CMD ["python", "-u", "/app/handler.py"]

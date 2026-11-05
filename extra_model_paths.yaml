@@ -1,0 +1,7 @@
+runpod:
+  base_path: /workspace/models/
+  checkpoints: diffusion_models
+  diffusion_models: diffusion_models
+  clip: clip
+  vae: vae
+  loras: loras
