@@ -15,7 +15,7 @@ RUN git clone https://github.com/comfyanonymous/ComfyUI.git /root/ComfyUI
 WORKDIR /root/ComfyUI
 RUN pip install --no-cache-dir --upgrade torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
 RUN pip install --no-cache-dir -r requirements.txt
-RUN python3 -c "with open('/usr/local/lib/python3.10/dist-packages/comfy_kitchen/backends/eager/__init__.py', 'w') as f: f.write('def __getattr__(name): return lambda *a, **k: None\n')"
+RUN python3 -c "with open('/usr/local/lib/python3.10/dist-packages/torch/_library/custom_ops.py', 'w') as f: f.write('def custom_op(name, mutates_args=(), device_types=None, schema=None):\n    def decorator(fn):\n        fn.register_fake = lambda x: fn\n        return fn\n    return decorator\n')"
 RUN pip install --no-cache-dir runpod
 
 # Set up working directory for the serverless handler
