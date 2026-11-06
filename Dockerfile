@@ -1,4 +1,4 @@
-FROM runpod/worker-comfy:latest
+FROM runpod/worker-comfyui:5.10.0-base
 
 # Load volume model paths
 COPY extra_model_paths.yaml /comfyui/extra_model_paths.yaml
