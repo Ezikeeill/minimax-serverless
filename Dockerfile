@@ -1,4 +1,4 @@
-FROM runpod/pytorch:2.2.1-py3.10-cuda12.1.1-devel-ubuntu22.04
+FROM runpod/pytorch:2.4.0-py3.10-cuda12.1.1-devel-ubuntu22.04
 
 WORKDIR /root
 
@@ -10,16 +10,17 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libglib2.0-0 \
     && rm -rf /var/lib/apt/lists/*
 
-# Clone ComfyUI and install its base dependencies
-RUN git clone https://github.com/comfyanonymous/ComfyUI.git /root/ComfyUI
+# Clone ComfyUI master
+RUN git clone --depth 1 https://github.com/comfyanonymous/ComfyUI.git /root/ComfyUI
 WORKDIR /root/ComfyUI
-RUN pip install --no-cache-dir --upgrade torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
-RUN pip install --no-cache-dir -r requirements.txt
-RUN pip uninstall -y comfy_kitchen || true && rm -rf /usr/local/lib/python3.10/dist-packages/comfy_kitchen*
-RUN pip install --no-cache-dir runpod
+
+# Let the base image manage PyTorch/CUDA; install requirements and runpod
+RUN pip install --no-cache-dir -r requirements.txt runpod
+
+# In-build smoke test: Catch broken imports in GitHub Actions rather than on RunPod
+RUN python -c "import comfy.quant_ops; print('--> ComfyUI quant_ops import OK')"
 
 # Set up working directory for the serverless handler
-ENV COMFY_DISABLE_CUSTOM_OPS=1
 WORKDIR /app
 
 # Copy application files
