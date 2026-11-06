@@ -1,4 +1,4 @@
-FROM runpod/pytorch:2.4.0-py3.10-cuda12.4.1-devel-ubuntu22.04
+FROM pytorch/pytorch:2.4.0-cuda12.4-cudnn9-devel
 
 WORKDIR /root
 
@@ -10,14 +10,14 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libglib2.0-0 \
     && rm -rf /var/lib/apt/lists/*
 
-# Clone ComfyUI master
+# Clone ComfyUI
 RUN git clone --depth 1 https://github.com/comfyanonymous/ComfyUI.git /root/ComfyUI
 WORKDIR /root/ComfyUI
 
-# Let the base image manage PyTorch/CUDA; install requirements and runpod
+# Install ComfyUI dependencies and runpod SDK
 RUN pip install --no-cache-dir -r requirements.txt runpod
 
-# In-build smoke test: Catch broken imports in GitHub Actions rather than on RunPod
+# In-build smoke test: Validates import chain inside GitHub Actions
 RUN python -c "import comfy.quant_ops; print('--> ComfyUI quant_ops import OK')"
 
 # Set up working directory for the serverless handler
