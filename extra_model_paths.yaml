@@ -1,4 +1,12 @@
-runpod:
+runpod_volume:
+  base_path: /runpod-volume
+  checkpoints: models/checkpoints
+  diffusion_models: models/diffusion_models
+  vae: models/vae
+  loras: models/loras
+  clip: models/clip
+
+runpod_workspace:
   base_path: /runpod-volume/workspace
   checkpoints: models/checkpoints
   diffusion_models: models/diffusion_models
